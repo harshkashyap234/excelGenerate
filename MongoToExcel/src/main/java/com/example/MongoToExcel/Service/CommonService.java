@@ -22,8 +22,10 @@ import java.util.*;
 public class CommonService {
 
 
-    void header(Map<String, Object> map, XSSFSheet sheet,  XSSFCellStyle style){
-       int colno =0;
+    public static final String YYYY_MM_DD = "yyyy-MM-dd";
+
+   private void creatingHeader(Map<String, Object> map, XSSFSheet sheet, XSSFCellStyle style){
+        int colno =0;
         XSSFRow row = sheet.createRow(0) ;
 
 
@@ -46,7 +48,7 @@ public class CommonService {
                             XSSFCell cell = row.createCell(colno);
                             cell.setCellStyle(style);
 
-                         cell.setCellValue(String.valueOf(key2) + "."+String.valueOf(key3));
+                            cell.setCellValue(String.valueOf(key2) + "."+String.valueOf(key3));
                             sheet.autoSizeColumn(colno);
 
                             colno++;
@@ -84,12 +86,11 @@ public class CommonService {
     }
 
 
-    void DataMappingEachRow(Map<String, Object> map, XSSFSheet sheet,  XSSFCellStyle style , int rowNo) {
-
+  private  void MappingDataToEachRow(Map<String, Object> map, XSSFSheet sheet,  XSSFCellStyle style , int rowNo) {
 
         int colno = 0;
 
-      XSSFRow  row = sheet.createRow(rowNo);
+        XSSFRow  row = sheet.createRow(rowNo);
 
         for (Map.Entry<String, Object> instance : map.entrySet()) {
 
@@ -154,7 +155,7 @@ public class CommonService {
 
     public List<Orders> createFile(String orgNo, String startDate, String endDate) throws Exception {
 
-        SimpleDateFormat sdate = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdate = new SimpleDateFormat(YYYY_MM_DD);
         sdate.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date startDateDate = sdate.parse(startDate);
 
@@ -213,12 +214,12 @@ public class CommonService {
 
 
 
-            header(ordersMap,sheet,style);
+            creatingHeader(ordersMap,sheet,style);
             int rowno=1;
             for (Orders data : list) {
 
                 Map<String, Object> orderMap = OrdersClassMapper.INSTANCE.toMap(data);
-                DataMappingEachRow(orderMap,sheet,style,rowno);
+                MappingDataToEachRow(orderMap,sheet,style,rowno);
                 rowno++;
 
 
@@ -228,20 +229,21 @@ public class CommonService {
 
 
         try (FileOutputStream fo = new FileOutputStream(new File("sheet.xlsx"))) {
-                workbook.write(fo);
-                fo.close();
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-
-
-            workbook.close();
-
-
-            return ordersList;
-
+            workbook.write(fo);
+            fo.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
         }
+
+
+        workbook.close();
+
+
+        return ordersList;
+
+    }
 
 
 
 }
+
