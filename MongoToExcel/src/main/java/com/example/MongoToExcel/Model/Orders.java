@@ -1,11 +1,8 @@
 package com.example.MongoToExcel.Model;
-
-
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.Date;
 
 @Document(collection = "orders")
 @Data
@@ -33,9 +30,6 @@ public class Orders {
     private String deleted;
     private String _class;
 
-    // Getters and Setters
-
-    // ChargeDetails nested class
     @Data
     public static class ChargeDetails {
         private String chargeType;
@@ -62,56 +56,35 @@ public class Orders {
         private String paymentMode;
         private FreightCharges freightCharges;
         private CodCharges codCharges;
-
-        // Getters and Setters
     }
 
-    // OrderValue nested class
     @Data
     public static class OrderValue {
         private String currencyCode;
         private Double amount;
-
-        // Getters and Setters
     }
 
-    // ShipmentValue nested class
     @Data
     public static class ShipmentValue {
         private String currencyCode;
         private Double amount;
-
-        // Getters and Setters
     }
 
-    // TotalCharges nested class
     @Data
     public static class TotalCharges {
         private String currencyCode;
         private Double amount;
-
-        // Getters and Setters
     }
 
-    // FreightCharges nested class
     @Data
     public static class FreightCharges {
         private String currencyCode;
         private Double amount;
-
-        // Getters and Setters
     }
 
-    // CodCharges nested class
     @Data
     public static class CodCharges {
         private String currencyCode;
         private Double amount;
-
-        // Getters and Setters
     }
-
-
-
-
 }
