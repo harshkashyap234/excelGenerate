@@ -49,19 +49,19 @@ public class CommonService {
         return result.toString();
     }
 
-    private static void flatten(JsonNode node, String prefix, LinkedHashMap<String,String> map) {
+    private static void flatten(JsonNode node, String prefix, LinkedHashMap<String,String> mapOfOrderField) {
         if (node.isObject()) {
             Iterator<Map.Entry<String, JsonNode>> fields = node.fields();
             while (fields.hasNext()) {
                 Map.Entry<String, JsonNode> field = fields.next();
-                flatten(field.getValue(), prefix + field.getKey() + ".",map);
+                flatten(field.getValue(), prefix + field.getKey() + ".",mapOfOrderField);
             }
         } else if (node.isArray()) {
             for (int i = 0; i < node.size(); i++) {
-                flatten(node.get(i), prefix + "[" + i + "].",map);
+                flatten(node.get(i), prefix + "[" + i + "].",mapOfOrderField);
             }
         } else {
-            map.put(convertToHumanReadable(prefix),node.asText());
+            mapOfOrderField.put(convertToHumanReadable(prefix),node.asText());
         }
     }
 
