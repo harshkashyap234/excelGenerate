@@ -1,5 +1,6 @@
 package com.example.MongoToExcel.Service;
 import com.example.MongoToExcel.Model.Orders;
+import com.example.MongoToExcel.Model.StaticMapProperties;
 import com.example.MongoToExcel.Repositories.CommonRepo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -8,6 +9,7 @@ import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.config.ScheduledTask;
 import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,8 +29,48 @@ public class CommonService {
     private ObjectMapper objectMapper;
     @Autowired
     private CommonRepo commonRepo;
-
-
+    static Map<String, Object> staticMap = new LinkedHashMap<>();
+    static {
+        staticMap.put("Org Code", new StaticMapProperties(true));
+        staticMap.put("Transaction Time", new StaticMapProperties(true));
+        staticMap.put("Transaction Type", new StaticMapProperties(true));
+        staticMap.put("Transaction Reference", new StaticMapProperties(true));
+        staticMap.put("Charge Sub Type", new StaticMapProperties(true));
+        staticMap.put("Courier Awb No", new StaticMapProperties(true));
+        staticMap.put("Charge Details - Charge Type", new StaticMapProperties(true));
+        staticMap.put("Charge Details - Order Value - Currency Code", new StaticMapProperties(true));
+        staticMap.put("Charge Details - Order Value - Amount", new StaticMapProperties(true));
+        staticMap.put("Charge Details - Percentage Fee", new StaticMapProperties(true));
+        staticMap.put("Charge Details - Activation Date", new StaticMapProperties(true));
+        staticMap.put("Charge Details - End Date", new StaticMapProperties(true));
+        staticMap.put("Charge Details - Platform Name", new StaticMapProperties(true));
+        staticMap.put("Charge Details - Live Date", new StaticMapProperties(true));
+        staticMap.put("Charge Details - Shipment Value - Currency Code", new StaticMapProperties(true));
+        staticMap.put("Charge Details - Shipment Value - Amount", new StaticMapProperties(true));
+        staticMap.put("Charge Details - Shipment Creation Date", new StaticMapProperties(true));
+        staticMap.put("Charge Details - Source Pincode", new StaticMapProperties(true));
+        staticMap.put("Charge Details - Source City", new StaticMapProperties(true));
+        staticMap.put("Charge Details - Destination Pincode", new StaticMapProperties(true));
+        staticMap.put("Charge Details - Destination City", new StaticMapProperties(true));
+        staticMap.put("Charge Details - Zone", new StaticMapProperties(true));
+        staticMap.put("Charge Details - Courier Code", new StaticMapProperties(true));
+        staticMap.put("Charge Details - Dead Weight", new StaticMapProperties(true));
+        staticMap.put("Charge Details - Volume Weight", new StaticMapProperties(true));
+        staticMap.put("Charge Details - Charged Weight", new StaticMapProperties(true));
+        staticMap.put("Charge Details - Weight Slab", new StaticMapProperties(true));
+        staticMap.put("Charge Details - Shipment Type", new StaticMapProperties(true));
+        staticMap.put("Charge Details - Payment Mode", new StaticMapProperties(true));
+        staticMap.put("Charge Details - Freight Charges - Currency Code", new StaticMapProperties(true));
+        staticMap.put("Charge Details - Freight Charges - Amount", new StaticMapProperties(true));
+        staticMap.put("Charge Details - Cod Charges - Currency Code", new StaticMapProperties(true));
+        staticMap.put("Charge Details - Cod Charges - Amount", new StaticMapProperties(true));
+        staticMap.put("Billing Period Id", new StaticMapProperties(true));
+        staticMap.put("Total Charges - Currency Code", new StaticMapProperties(true));
+        staticMap.put("Total Charges - Amount", new StaticMapProperties(true));
+        staticMap.put("Gst Percentage", new StaticMapProperties(true));
+        staticMap.put("Total Charges With Gst - Currency Code", new StaticMapProperties(true));
+        staticMap.put("Total Charges With Gst - Amount", new StaticMapProperties(true));
+    }
     private static String convertToHumanReadable(String input) {
         String[] parts = input.split("\\.");
         StringBuilder result = new StringBuilder();
@@ -75,36 +117,38 @@ public class CommonService {
 
 
     private void setHeader(Orders order, XSSFSheet sheet,  XSSFCellStyle style ) throws JsonProcessingException {
-
-        int colno = 0;
         XSSFRow  row = sheet.createRow(0);
-        Map<String,String> headerMap = flattenUtil(order);
-        for(Map.Entry<String,String> details : headerMap.entrySet()){
-            String key = details.getKey();
-            if(key.equals("Id"))continue;
-            XSSFCell cell = row.createCell(colno);
-            cell.setCellStyle(style);
-            cell.setCellValue(key);
-            sheet.autoSizeColumn(colno);
-            colno++;
+        int colno=0;
+        for(Map.Entry<String,Object>  headerMap : staticMap.entrySet()){
+            String key = headerMap.getKey();
+            StaticMapProperties headerProperty =(StaticMapProperties)staticMap.get(key);
+            if(headerProperty.getIsVisible()) {
+                XSSFCell cell = row.createCell(colno);
+                cell.setCellStyle(style);
+                cell.setCellValue(key);
+                sheet.autoSizeColumn(colno);
+                colno++;
+            }
         }
-
     }
-    private void dataMapping(Orders order, XSSFSheet sheet,  XSSFCellStyle style , int rowNo) throws JsonProcessingException {
 
+    private void dataMapping(Orders order, XSSFSheet sheet,  XSSFCellStyle style , int rowNo) throws JsonProcessingException {
         int colno = 0;
         XSSFRow  row = sheet.createRow(rowNo);
         Map<String,String> dataMap = flattenUtil(order);
         for(Map.Entry<String,String> details : dataMap.entrySet()){
             String value = details.getValue();
-            if(details.getKey().equals("Id"))continue;
-            XSSFCell cell = row.createCell(colno);
-            cell.setCellStyle(style);
-            if (String.valueOf(value).equals("null")) {
-                cell.setCellValue("");
-            } else cell.setCellValue(String.valueOf(value));
-            sheet.autoSizeColumn(colno);
-            colno++;
+            String key = details.getKey();
+            StaticMapProperties headerProperty =(StaticMapProperties)staticMap.get(key);
+            if(staticMap.containsKey(key) && headerProperty.getIsVisible()) {
+                XSSFCell cell = row.createCell(colno);
+                cell.setCellStyle(style);
+                if (String.valueOf(value).equals("null")) {
+                    cell.setCellValue("");
+                } else cell.setCellValue(String.valueOf(value));
+                sheet.autoSizeColumn(colno);
+                colno++;
+            }
         }
     }
 
