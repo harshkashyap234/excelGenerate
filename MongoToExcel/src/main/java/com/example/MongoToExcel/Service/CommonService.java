@@ -9,7 +9,6 @@ import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.config.ScheduledTask;
 import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,64 +30,46 @@ public class CommonService {
     private CommonRepo commonRepo;
     static Map<String, Object> staticMap = new LinkedHashMap<>();
     static {
-        staticMap.put("Org Code", new StaticMapProperties(true));
-        staticMap.put("Transaction Time", new StaticMapProperties(true));
-        staticMap.put("Transaction Type", new StaticMapProperties(true));
-        staticMap.put("Transaction Reference", new StaticMapProperties(true));
-        staticMap.put("Charge Sub Type", new StaticMapProperties(true));
-        staticMap.put("Courier Awb No", new StaticMapProperties(true));
-        staticMap.put("Charge Details - Charge Type", new StaticMapProperties(true));
-        staticMap.put("Charge Details - Order Value - Currency Code", new StaticMapProperties(true));
-        staticMap.put("Charge Details - Order Value - Amount", new StaticMapProperties(true));
-        staticMap.put("Charge Details - Percentage Fee", new StaticMapProperties(true));
-        staticMap.put("Charge Details - Activation Date", new StaticMapProperties(true));
-        staticMap.put("Charge Details - End Date", new StaticMapProperties(true));
-        staticMap.put("Charge Details - Platform Name", new StaticMapProperties(true));
-        staticMap.put("Charge Details - Live Date", new StaticMapProperties(true));
-        staticMap.put("Charge Details - Shipment Value - Currency Code", new StaticMapProperties(true));
-        staticMap.put("Charge Details - Shipment Value - Amount", new StaticMapProperties(true));
-        staticMap.put("Charge Details - Shipment Creation Date", new StaticMapProperties(true));
-        staticMap.put("Charge Details - Source Pincode", new StaticMapProperties(true));
-        staticMap.put("Charge Details - Source City", new StaticMapProperties(true));
-        staticMap.put("Charge Details - Destination Pincode", new StaticMapProperties(true));
-        staticMap.put("Charge Details - Destination City", new StaticMapProperties(true));
-        staticMap.put("Charge Details - Zone", new StaticMapProperties(true));
-        staticMap.put("Charge Details - Courier Code", new StaticMapProperties(true));
-        staticMap.put("Charge Details - Dead Weight", new StaticMapProperties(true));
-        staticMap.put("Charge Details - Volume Weight", new StaticMapProperties(true));
-        staticMap.put("Charge Details - Charged Weight", new StaticMapProperties(true));
-        staticMap.put("Charge Details - Weight Slab", new StaticMapProperties(true));
-        staticMap.put("Charge Details - Shipment Type", new StaticMapProperties(true));
-        staticMap.put("Charge Details - Payment Mode", new StaticMapProperties(true));
-        staticMap.put("Charge Details - Freight Charges - Currency Code", new StaticMapProperties(true));
-        staticMap.put("Charge Details - Freight Charges - Amount", new StaticMapProperties(true));
-        staticMap.put("Charge Details - Cod Charges - Currency Code", new StaticMapProperties(true));
-        staticMap.put("Charge Details - Cod Charges - Amount", new StaticMapProperties(true));
-        staticMap.put("Billing Period Id", new StaticMapProperties(true));
-        staticMap.put("Total Charges - Currency Code", new StaticMapProperties(true));
-        staticMap.put("Total Charges - Amount", new StaticMapProperties(true));
-        staticMap.put("Gst Percentage", new StaticMapProperties(true));
-        staticMap.put("Total Charges With Gst - Currency Code", new StaticMapProperties(true));
-        staticMap.put("Total Charges With Gst - Amount", new StaticMapProperties(true));
-    }
-    private static String convertToHumanReadable(String input) {
-        String[] parts = input.split("\\.");
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < parts.length; i++) {
-            int t=0;
-            for(int j=0;j<parts[i].length();j++){
-                if(Character.isUpperCase(parts[i].charAt(j))){
-                    result.append(parts[i].substring(t, t+1).toUpperCase() + parts[i].substring(t+1,j));
-                    result.append(" ");
-                    t=j;
-                }
-            }
-            result.append(parts[i].substring(t, t+1).toUpperCase() + parts[i].substring(t+1));
-            if (i < parts.length - 1) {
-                result.append(" - ");
-            }
-        }
-        return result.toString();
+        staticMap.put("orgCode.", new StaticMapProperties(true, "Org Code"));
+        staticMap.put("transactionTime.", new StaticMapProperties(true, "Transaction Time"));
+        staticMap.put("transactionType.", new StaticMapProperties(true, "Transaction Type"));
+        staticMap.put("transactionReference.", new StaticMapProperties(true, "Transaction Reference"));
+        staticMap.put("chargeSubType.", new StaticMapProperties(true, "Charge Sub Type"));
+        staticMap.put("courierAwbNo.", new StaticMapProperties(true, "Courier Awb No"));
+        staticMap.put("chargeDetails.chargeType.", new StaticMapProperties(true, "Charge Details - Charge Type"));
+        staticMap.put("chargeDetails.orderValue.currencyCode.", new StaticMapProperties(true, "Charge Details - Order Value - Currency Code"));
+        staticMap.put("chargeDetails.orderValueAmount.", new StaticMapProperties(true, "Charge Details - Order Value - Amount"));
+        staticMap.put("chargeDetails.percentageFee.", new StaticMapProperties(true, "Charge Details - Percentage Fee"));
+        staticMap.put("chargeDetails.activationDate.", new StaticMapProperties(true, "Charge Details - Activation Date"));
+        staticMap.put("chargeDetails.endDate.", new StaticMapProperties(true, "Charge Details - End Date"));
+        staticMap.put("chargeDetails.platformName.", new StaticMapProperties(true, "Charge Details - Platform Name"));
+        staticMap.put("chargeDetails.liveDate.", new StaticMapProperties(true, "Charge Details - Live Date"));
+        staticMap.put("chargeDetails.shipmentValue.currencyCode.", new StaticMapProperties(true, "Charge Details - Shipment Value - Currency Code"));
+        staticMap.put("chargeDetails.shipmentValue.amount.", new StaticMapProperties(true, "Charge Details - Shipment Value - Amount"));
+        staticMap.put("chargeDetails.shipmentCreationDate.", new StaticMapProperties(true, "Charge Details - Shipment Creation Date"));
+        staticMap.put("chargeDetails.sourcePincode.", new StaticMapProperties(true, "Charge Details - Source Pincode"));
+        staticMap.put("chargeDetails.sourceCity.", new StaticMapProperties(true, "Charge Details - Source City"));
+        staticMap.put("chargeDetails.destinationPincode.", new StaticMapProperties(true, "Charge Details - Destination Pincode"));
+        staticMap.put("chargeDetails.destinationCity.", new StaticMapProperties(true, "Charge Details - Destination City"));
+        staticMap.put("chargeDetails.zone.", new StaticMapProperties(true, "Charge Details - Zone"));
+        staticMap.put("chargeDetails.courierCode.", new StaticMapProperties(true, "Charge Details - Courier Code"));
+        staticMap.put("chargeDetails.deadWeight.", new StaticMapProperties(true, "Charge Details - Dead Weight"));
+        staticMap.put("chargeDetails.volumeWeight.", new StaticMapProperties(true, "Charge Details - Volume Weight"));
+        staticMap.put("chargeDetails.chargedWeight.", new StaticMapProperties(true, "Charge Details - Charged Weight"));
+        staticMap.put("chargeDetails.weightSlab.", new StaticMapProperties(true, "Charge Details - Weight Slab"));
+        staticMap.put("chargeDetails.shipmentType.", new StaticMapProperties(true, "Charge Details - Shipment Type"));
+        staticMap.put("chargeDetails.paymentMode.", new StaticMapProperties(true, "Charge Details - Payment Mode"));
+        staticMap.put("chargeDetails.freightCharges.currencyCode.", new StaticMapProperties(true, "Charge Details - Freight Charges - Currency Code"));
+        staticMap.put("chargeDetails.freightCharges.amount.", new StaticMapProperties(true, "Charge Details - Freight Charges - Amount"));
+        staticMap.put("chargeDetails.codCharges.currencyCode.", new StaticMapProperties(true, "Charge Details - Cod Charges - Currency Code"));
+        staticMap.put("chargeDetails.codCharges.amount.", new StaticMapProperties(true, "Charge Details - Cod Charges - Amount"));
+        staticMap.put("billingPeriodId.", new StaticMapProperties(true, "Billing Period Id"));
+        staticMap.put("totalCharges.currencyCode.", new StaticMapProperties(true, "Total Charges - Currency Code"));
+        staticMap.put("totalCharges.amount.", new StaticMapProperties(true, "Total Charges - Amount"));
+        staticMap.put("gstPercentage.", new StaticMapProperties(true, "Gst Percentage"));
+        staticMap.put("totalChargesWithGst.currencyCode.", new StaticMapProperties(true, "Total Charges With Gst - Currency Code"));
+        staticMap.put("totalChargesWithGst.amount.", new StaticMapProperties(true, "Total Charges With Gst - Amount"));
+
     }
 
     private static void flatten(JsonNode node, String prefix, LinkedHashMap<String,String> mapOfOrderField) {
@@ -103,7 +84,7 @@ public class CommonService {
                 flatten(node.get(i), prefix + "[" + i + "].",mapOfOrderField);
             }
         } else {
-            mapOfOrderField.put(convertToHumanReadable(prefix),node.asText());
+            mapOfOrderField.put(prefix,node.asText());
         }
     }
 
@@ -125,7 +106,7 @@ public class CommonService {
             if(headerProperty.getIsVisible()) {
                 XSSFCell cell = row.createCell(colno);
                 cell.setCellStyle(style);
-                cell.setCellValue(key);
+                cell.setCellValue(headerProperty.getHeaderName());
                 sheet.autoSizeColumn(colno);
                 colno++;
             }

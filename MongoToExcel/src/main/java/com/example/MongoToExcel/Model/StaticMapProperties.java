@@ -10,4 +10,5 @@ import lombok.*;
 @AllArgsConstructor
 public class StaticMapProperties {
     Boolean isVisible;
+    String headerName;
 }
