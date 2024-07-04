@@ -137,7 +137,8 @@ public class CommonConfig {
         flattenNameByProperty.put("chargeDetails.chargeType.", new StaticMapProperties(true, "Charge Details - Charge Type"));
         flattenNameByProperty.put("chargeDetails.orderValue.currencyCode.", new StaticMapProperties(true, "Charge Details - Order Value - Currency Code"));
         flattenNameByProperty.put("chargeDetails.orderValue.amount.", new StaticMapProperties(true, "Charge Details - Order Value - Amount"));
-        flattenNameByProperty.put("chargeDetails.percentageFee.", new StaticMapProperties(true, "Charge Details - Percentage Fee")); map.put("billingPeriodId.", new StaticMapProperties(true, "Billing Period Id"));
+        flattenNameByProperty.put("chargeDetails.percentageFee.", new StaticMapProperties(true, "Charge Details - Percentage Fee"));
+        flattenNameByProperty.put("billingPeriodId.", new StaticMapProperties(true, "Billing Period Id"));
         flattenNameByProperty.put("totalCharges.currencyCode.", new StaticMapProperties(true, "Total Charges - Currency Code"));
         flattenNameByProperty.put("totalCharges.amount.", new StaticMapProperties(true, "Total Charges - Amount"));
         flattenNameByProperty.put("totalChargesWithGst.currencyCode.", new StaticMapProperties(true, "Total Charges With Gst - Currency Code"));
