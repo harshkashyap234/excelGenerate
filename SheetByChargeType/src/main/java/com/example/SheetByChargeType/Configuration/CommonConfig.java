@@ -1,15 +1,11 @@
 package com.example.SheetByChargeType.Configuration;
-
 import com.example.SheetByChargeType.Model.ChargeType;
 import com.example.SheetByChargeType.Model.StaticMapProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-
 @Configuration
 public class CommonConfig {
 
@@ -17,16 +13,16 @@ public class CommonConfig {
     private static LinkedHashMap<String,List<ChargeType>> sheetNameByChargeType(){
         LinkedHashMap<String,List<ChargeType>> nameByChargeType = new LinkedHashMap<>();
 
-        nameByChargeType.put("Fulfillment Itemized Statement",new ArrayList<ChargeType>(List.of(ChargeType.FULFILLMENT_FEE)));
-        nameByChargeType.put("COD Remittance Statement",new ArrayList<ChargeType>(List.of(ChargeType.COD_REMITTANCE)));
-        nameByChargeType.put("Communication Itemized Statement",new ArrayList<ChargeType>(List.of(ChargeType.COMMUNICATION_FEE)));
-        nameByChargeType.put("Managed Services Itemized Statement",new ArrayList<ChargeType>(List.of(ChargeType.MANAGED_SERVICES_FEE)));
-        nameByChargeType.put("Registration Itemized Statement",new ArrayList<ChargeType>(List.of(ChargeType.REGISTRATION_FEE)));
-        nameByChargeType.put("Catalog Itemized Statement" ,new ArrayList<ChargeType>(List.of(ChargeType.CATALOG_FEE)));
-        nameByChargeType.put("Pricing Itemized Statement",new ArrayList<ChargeType>(List.of(ChargeType.PRICING_FEE)));
-        nameByChargeType.put("Credit or Debit Itemized Statement",new ArrayList<ChargeType>(List.of(ChargeType.DEBIT_ADJUSTMENT,ChargeType.CREDIT_ADJUSTMENT)));
-        nameByChargeType.put("Subscription Itemized Statement" ,new ArrayList<ChargeType>(List.of(ChargeType.SUBSCRIPTION_FEE)));
-        nameByChargeType.put("OMS Itemized Statement",new ArrayList<ChargeType>(List.of(ChargeType.OMS_FEE)));
+        nameByChargeType.put("Fulfillment Itemized Statement",new ArrayList<>(List.of(ChargeType.FULFILLMENT_FEE)));
+        nameByChargeType.put("COD Remittance Statement",new ArrayList<>(List.of(ChargeType.COD_REMITTANCE)));
+        nameByChargeType.put("Communication Itemized Statement",new ArrayList<>(List.of(ChargeType.COMMUNICATION_FEE)));
+        nameByChargeType.put("Managed Services Itemized Statement",new ArrayList<>(List.of(ChargeType.MANAGED_SERVICES_FEE)));
+        nameByChargeType.put("Registration Itemized Statement",new ArrayList<>(List.of(ChargeType.REGISTRATION_FEE)));
+        nameByChargeType.put("Catalog Itemized Statement" ,new ArrayList<>(List.of(ChargeType.CATALOG_FEE)));
+        nameByChargeType.put("Pricing Itemized Statement",new ArrayList<>(List.of(ChargeType.PRICING_FEE)));
+        nameByChargeType.put("Credit or Debit Itemized Statement",new ArrayList<>(List.of(ChargeType.DEBIT_ADJUSTMENT,ChargeType.CREDIT_ADJUSTMENT)));
+        nameByChargeType.put("Subscription Itemized Statement" ,new ArrayList<>(List.of(ChargeType.SUBSCRIPTION_FEE)));
+        nameByChargeType.put("OMS Itemized Statement",new ArrayList<>(List.of(ChargeType.OMS_FEE)));
         return nameByChargeType;
     }
 
