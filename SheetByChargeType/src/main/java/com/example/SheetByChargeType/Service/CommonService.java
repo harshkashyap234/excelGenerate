@@ -1,7 +1,8 @@
 package com.example.SheetByChargeType.Service;
+
 import com.example.SheetByChargeType.Model.ChargeType;
-import com.example.SheetByChargeType.Model.TransactionItem;
 import com.example.SheetByChargeType.Model.StaticMapProperties;
+import com.example.SheetByChargeType.Model.TransactionItem;
 import com.example.SheetByChargeType.Repositories.CommonRepo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -11,6 +12,8 @@ import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -26,7 +29,7 @@ public class CommonService {
     public static final String UTC = "UTC";
     public static final String YYYY_MM_DD = "yyyy-MM-dd";
     @Autowired
-    private  LinkedHashMap<String, List<ChargeType>> sheetNameByChargeType ;
+    private  LinkedHashMap<String, List<ChargeType>> sheetNameToChargeType ;
     @Autowired
     private  LinkedHashMap<String, StaticMapProperties> communicationFee ;
     @Autowired
@@ -38,7 +41,9 @@ public class CommonService {
     @Autowired
     private  LinkedHashMap<String, StaticMapProperties>  registrationFee ;
     @Autowired
-    private LinkedHashMap<String,LinkedHashMap<String,StaticMapProperties>> sheetNameBySheetMap;
+    private LinkedHashMap<String,LinkedHashMap<String,StaticMapProperties>> sheetNameToSheetMap;
+    @Autowired
+    private Set<String> percentageCheckMap;
     @Autowired
     private CommonRepo commonRepo;
     @Autowired
@@ -72,11 +77,11 @@ public class CommonService {
     private void setHeader( XSSFSheet sheet,  XSSFCellStyle style,String sheetName ) throws JsonProcessingException {
         XSSFRow row = sheet.createRow(0);
         int colno=0;
-        LinkedHashMap<String,StaticMapProperties> fieldNameByHeaderName = sheetNameBySheetMap.get(sheetName);
-        if(!fieldNameByHeaderName.isEmpty())
-            for(Map.Entry<String,StaticMapProperties>  fieldNameByHeaderNameEntity : fieldNameByHeaderName.entrySet()){
-                String key = fieldNameByHeaderNameEntity.getKey();
-                StaticMapProperties headerProperty =fieldNameByHeaderName.get(key);
+        LinkedHashMap<String,StaticMapProperties> fieldNameToHeaderName = sheetNameToSheetMap.get(sheetName);
+        if(!fieldNameToHeaderName.isEmpty())
+            for(Map.Entry<String,StaticMapProperties>  fieldNameToHeaderNameEntity : fieldNameToHeaderName.entrySet()){
+                String key = fieldNameToHeaderNameEntity.getKey();
+                StaticMapProperties headerProperty =fieldNameToHeaderName.get(key);
                 if(headerProperty.getIsVisible()) {
                     XSSFCell cell = row.createCell(colno);
                     cell.setCellStyle(style);
@@ -90,18 +95,21 @@ public class CommonService {
     private void dataMapping(TransactionItem transactionItem, XSSFSheet sheet,  XSSFCellStyle style , int rowNo,String sheetName) throws JsonProcessingException {
         int colno = 0;
         XSSFRow  row = sheet.createRow(rowNo);
-        Map<String,String> flattenFieldByValue = flattenUtil(transactionItem);
-        LinkedHashMap<String,StaticMapProperties> fieldNameByHeaderName = sheetNameBySheetMap.get(sheetName);
-        for(Map.Entry<String,String> nameByValueEntity : flattenFieldByValue.entrySet()){
-            String value = nameByValueEntity.getValue();
-            String key = nameByValueEntity.getKey();
-            StaticMapProperties headerProperty =fieldNameByHeaderName.get(key);
-            if(fieldNameByHeaderName.containsKey(key) && headerProperty.getIsVisible()) {
+        Map<String,String> flattenFieldToValue = flattenUtil(transactionItem);
+        LinkedHashMap<String,StaticMapProperties> fieldNameToHeaderName = sheetNameToSheetMap.get(sheetName);
+        for(Map.Entry<String,String> nameToValueEntity : flattenFieldToValue.entrySet()){
+            String value = nameToValueEntity.getValue();
+            String key = nameToValueEntity.getKey();
+            StaticMapProperties headerProperty =fieldNameToHeaderName.get(key);
+            if(fieldNameToHeaderName.containsKey(key) && headerProperty.getIsVisible()) {
                 XSSFCell cell = row.createCell(colno);
                 cell.setCellStyle(style);
                 if (String.valueOf(value).equals("null")) {
                     cell.setCellValue("");
-                } else cell.setCellValue(String.valueOf(value));
+                } else{
+                    if(percentageCheckMap.contains(key)) cell.setCellValue(String.format("%.0f%%",Double.parseDouble(value)*100));
+                    else cell.setCellValue(String.valueOf(value));
+                }
                 sheet.autoSizeColumn(colno);
                 colno++;
             }
@@ -142,7 +150,7 @@ public class CommonService {
         endDate = changeEndDataFormat(endDate);
 
         XSSFWorkbook workbook = new XSSFWorkbook();
-        for(Map.Entry<String, List<ChargeType>> entry : sheetNameByChargeType.entrySet() ){
+        for(Map.Entry<String, List<ChargeType>> entry : sheetNameToChargeType.entrySet() ){
             String sheetName = entry.getKey();
             XSSFSheet sheet = workbook.createSheet(sheetName);
             XSSFCellStyle style = workbook.createCellStyle();
@@ -169,5 +177,47 @@ public class CommonService {
         workbook.close();
         return "Sheet Successfully Created";
 
+    }
+
+    public byte[] createSheetByTrx(String transactionReferance) throws IOException {
+        List<TransactionItem> transactionItemsForTrxId = commonRepo.findByTransectionReferance(transactionReferance);
+
+        String chargeType = transactionItemsForTrxId.get(0).getChargeDetails().getChargeType();
+
+        for(Map.Entry<String,List<ChargeType>> entitiy : sheetNameToChargeType.entrySet()){
+            String  sheetName = entitiy.getKey();
+            List<ChargeType> ListOfChargeType = entitiy.getValue();
+            for(ChargeType chargeTypeEnum : ListOfChargeType){
+                if(chargeTypeEnum.toString().equals(chargeType)){
+                    XSSFWorkbook workbook = new XSSFWorkbook();
+                    XSSFSheet sheet = workbook.createSheet(sheetName);
+                    XSSFCellStyle style = workbook.createCellStyle();
+                    Font font = workbook.createFont();
+                    font.setBold(true);
+                    style.setFont(font);
+                    style.setAlignment(HorizontalAlignment.CENTER);
+                    if(!transactionItemsForTrxId.isEmpty()) setHeader(sheet,style,sheetName);
+                    int rowno=1;
+                    for(TransactionItem transactionItem : transactionItemsForTrxId){
+                        dataMapping(transactionItem,sheet,style,rowno,sheetName);
+                        rowno++;
+                    }
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    workbook.write(bos);
+                    try (FileOutputStream fo = new FileOutputStream(new File("shee2.xlsx"))) {
+                        workbook.write(fo);
+                    } catch (IOException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    workbook.close();
+
+
+
+                    return bos.toByteArray();
+
+                }
+            }
+        }
+        return null;
     }
 }
