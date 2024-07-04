@@ -8,11 +8,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 @Configuration
 public class CommonConfig {
-
     @Bean
     private static LinkedHashMap<String,List<ChargeType>> sheetNameByChargeType(){
         LinkedHashMap<String,List<ChargeType>> nameByChargeType = new LinkedHashMap<>();
-
         nameByChargeType.put("Fulfillment Itemized Statement",new ArrayList<>(List.of(ChargeType.FULFILLMENT_FEE)));
         nameByChargeType.put("COD Remittance Statement",new ArrayList<>(List.of(ChargeType.COD_REMITTANCE)));
         nameByChargeType.put("Communication Itemized Statement",new ArrayList<>(List.of(ChargeType.COMMUNICATION_FEE)));
@@ -25,11 +23,9 @@ public class CommonConfig {
         nameByChargeType.put("OMS Itemized Statement",new ArrayList<>(List.of(ChargeType.OMS_FEE)));
         return nameByChargeType;
     }
-
     @Bean
     public  static LinkedHashMap<String, StaticMapProperties> communicationFee(){
         LinkedHashMap<String, StaticMapProperties> flattenNameByProperty = new LinkedHashMap<>();
-
         flattenNameByProperty.put("orgCode.", new StaticMapProperties(true, "Org Code"));
         flattenNameByProperty.put("transactionTime.", new StaticMapProperties(true, "Transaction Time"));
         flattenNameByProperty.put("transactionType.", new StaticMapProperties(true, "Transaction Type"));
@@ -43,14 +39,12 @@ public class CommonConfig {
         flattenNameByProperty.put("gstPercentage.", new StaticMapProperties(true, "Gst Percentage"));
         flattenNameByProperty.put("totalChargesWithGst.currencyCode.", new StaticMapProperties(true, "Total Charges With Gst - Currency Code"));
         flattenNameByProperty.put("totalChargesWithGst.amount.", new StaticMapProperties(true, "Total Charges With Gst - Amount"));
-
         return flattenNameByProperty;
     }
 
     @Bean
     public  static LinkedHashMap<String, StaticMapProperties> fullfillmentFee(){
         LinkedHashMap<String, StaticMapProperties> flattenNameByProperty = new LinkedHashMap<>();
-
         flattenNameByProperty.put("orgCode.", new StaticMapProperties(true, "Org Code"));
         flattenNameByProperty.put("transactionTime.", new StaticMapProperties(true, "Transaction Time"));
         flattenNameByProperty.put("transactionType.", new StaticMapProperties(true, "Transaction Type"));
@@ -83,7 +77,6 @@ public class CommonConfig {
         flattenNameByProperty.put("gstPercentage.", new StaticMapProperties(true, "Gst Percentage"));
         flattenNameByProperty.put("totalChargesWithGst.currencyCode.", new StaticMapProperties(true, "Total Charges With Gst - Currency Code"));
         flattenNameByProperty.put("totalChargesWithGst.amount.", new StaticMapProperties(true, "Total Charges With Gst - Amount"));
-
         return flattenNameByProperty;
     }
     @Bean
@@ -146,7 +139,6 @@ public class CommonConfig {
     @Bean
     public static LinkedHashMap<String,LinkedHashMap<String,StaticMapProperties>>  sheetNameBySheetMap(){
         LinkedHashMap<String,LinkedHashMap<String,StaticMapProperties>> flattenNameByProperty = new LinkedHashMap<>();
-
         flattenNameByProperty.put("Fulfillment Itemized Statement",fullfillmentFee());
         flattenNameByProperty.put("COD Remittance Statement", new LinkedHashMap<>());
         flattenNameByProperty.put("Communication Itemized Statement", communicationFee());
@@ -157,9 +149,7 @@ public class CommonConfig {
         flattenNameByProperty.put("Credit or Debit Itemized Statement", new LinkedHashMap<>());
         flattenNameByProperty.put("Subscription Itemized Statement", subscriptionFee());
         flattenNameByProperty.put("OMS Itemized Statement", new LinkedHashMap<>());
-
         return flattenNameByProperty;
-
     }
 
 

@@ -163,7 +163,6 @@ public class CommonService {
 
         try (FileOutputStream fo = new FileOutputStream(new File("sheet.xlsx"))) {
             workbook.write(fo);
-
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }

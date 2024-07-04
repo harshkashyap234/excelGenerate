@@ -55,31 +55,26 @@ public class TransactionItem {
         private FreightCharges freightCharges;
         private CodCharges codCharges;
     }
-
     @Data
     public static class OrderValue {
         private String currencyCode;
         private Double amount;
     }
-
     @Data
     public static class ShipmentValue {
         private String currencyCode;
         private Double amount;
     }
-
     @Data
     public static class TotalCharges {
         private String currencyCode;
         private Double amount;
     }
-
     @Data
     public static class FreightCharges {
         private String currencyCode;
         private Double amount;
     }
-
     @Data
     public static class CodCharges {
         private String currencyCode;
