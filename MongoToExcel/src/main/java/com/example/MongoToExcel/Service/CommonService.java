@@ -38,7 +38,7 @@ public class CommonService {
         staticMap.put("courierAwbNo.", new StaticMapProperties(true, "Courier Awb No"));
         staticMap.put("chargeDetails.chargeType.", new StaticMapProperties(true, "Charge Details - Charge Type"));
         staticMap.put("chargeDetails.orderValue.currencyCode.", new StaticMapProperties(true, "Charge Details - Order Value - Currency Code"));
-        staticMap.put("chargeDetails.orderValueAmount.", new StaticMapProperties(true, "Charge Details - Order Value - Amount"));
+        staticMap.put("chargeDetails.orderValue.amount.", new StaticMapProperties(true, "Charge Details - Order Value - Amount"));
         staticMap.put("chargeDetails.percentageFee.", new StaticMapProperties(true, "Charge Details - Percentage Fee"));
         staticMap.put("chargeDetails.activationDate.", new StaticMapProperties(true, "Charge Details - Activation Date"));
         staticMap.put("chargeDetails.endDate.", new StaticMapProperties(true, "Charge Details - End Date"));

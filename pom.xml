@@ -23,7 +23,8 @@
 	</developers>
     <modules>
         <module>MongoToExcel</module>
-    </modules>
+		<module>SheetByChargeType</module>
+	</modules>
     <scm>
 		<connection/>
 		<developerConnection/>

@@ -1,0 +1,16 @@
+package com.example.SheetByChargeType.Model;
+
+public enum ChargeType {
+    FULFILLMENT_FEE,
+    COD_REMITTANCE,
+    COMMUNICATION_FEE,
+    DEBIT_ADJUSTMENT,
+    CREDIT_ADJUSTMENT,
+    SUBSCRIPTION_FEE,
+    MANAGED_SERVICES_FEE,
+    REGISTRATION_FEE,
+    CATALOG_FEE,
+    PRICING_FEE,
+    OMS_FEE
+
+}
