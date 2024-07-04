@@ -204,15 +204,6 @@ public class CommonService {
                     }
                     ByteArrayOutputStream bos = new ByteArrayOutputStream();
                     workbook.write(bos);
-                    try (FileOutputStream fo = new FileOutputStream(new File("shee2.xlsx"))) {
-                        workbook.write(fo);
-                    } catch (IOException e) {
-                        System.out.println(e.getMessage());
-                    }
-                    workbook.close();
-
-
-
                     return bos.toByteArray();
 
                 }
