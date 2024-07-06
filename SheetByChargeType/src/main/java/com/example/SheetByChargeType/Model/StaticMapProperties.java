@@ -9,4 +9,6 @@ import lombok.*;
 public class StaticMapProperties {
     Boolean isVisible;
     String headerName;
+    int columnNo;
+
 }

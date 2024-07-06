@@ -29,27 +29,38 @@ public class CommonService {
     public static final String UTC = "UTC";
     public static final String YYYY_MM_DD = "yyyy-MM-dd";
     @Autowired
-    private  LinkedHashMap<String, List<ChargeType>> sheetNameToChargeType ;
+    private  HashMap<String, List<ChargeType>> sheetNameToChargeType ;
     @Autowired
-    private  LinkedHashMap<String, StaticMapProperties> communicationFee ;
+    private  HashMap<String, StaticMapProperties> communicationItemizedStatementMap ;
     @Autowired
-    private  LinkedHashMap<String, StaticMapProperties> subscriptionFee ;
+    private  HashMap<String, StaticMapProperties> subscriptionItemizedStatementMap ;
     @Autowired
-    private  LinkedHashMap<String, StaticMapProperties> fullfillmentFee ;
+    private  HashMap<String, StaticMapProperties> fullfillmentItemizedStatementMap ;
     @Autowired
-    private  LinkedHashMap<String, StaticMapProperties>  managedServiceFee ;
+    private  HashMap<String, StaticMapProperties>  managedServiceItemizedStatementMap ;
     @Autowired
-    private  LinkedHashMap<String, StaticMapProperties>  registrationFee ;
+    private  HashMap<String, StaticMapProperties>  registrationItemizedStatementMap ;
     @Autowired
-    private LinkedHashMap<String,LinkedHashMap<String,StaticMapProperties>> sheetNameToSheetMap;
+    private  HashMap<String, StaticMapProperties>  CODRemittanceStatementMap ;
+    @Autowired
+    private  HashMap<String, StaticMapProperties>  catalogItemizedStatementMap ;
+
+    private  HashMap<String, StaticMapProperties>  pricingItemizedStatementMap ;
+
+    private  HashMap<String, StaticMapProperties>  creditOrDebitItemizedStatementMap ;
+
+    private  HashMap<String, StaticMapProperties>  OMSItemizedStatementMap ;
+    @Autowired
+    private HashMap<String,HashMap<String,StaticMapProperties>> sheetNameToSheetMap;
     @Autowired
     private Set<String> percentageCheckMap;
+
     @Autowired
     private CommonRepo commonRepo;
     @Autowired
     private ObjectMapper objectMapper;
 
-    private static void flatten(JsonNode node, String prefix, LinkedHashMap<String,String> mapOfOrderField) {
+    private static void flatten(JsonNode node, String prefix, HashMap<String,String> mapOfOrderField) {
         if (node.isObject()) {
             Iterator<Map.Entry<String, JsonNode>> fields = node.fields();
             while (fields.hasNext()) {
@@ -68,7 +79,7 @@ public class CommonService {
     private  Map<String,String> flattenUtil(TransactionItem transactionItem) throws JsonProcessingException {
         String JSONstring = objectMapper.writeValueAsString(transactionItem);
         JsonNode root = objectMapper.readTree(JSONstring);
-        LinkedHashMap<String,String> mapOfOrderField = new LinkedHashMap<>();
+        HashMap<String,String> mapOfOrderField = new HashMap<>();
         flatten(root, "" ,mapOfOrderField);
         return mapOfOrderField;
     }
@@ -76,32 +87,32 @@ public class CommonService {
 
     private void setHeader( XSSFSheet sheet,  XSSFCellStyle style,String sheetName ) throws JsonProcessingException {
         XSSFRow row = sheet.createRow(0);
-        int colno=0;
-        LinkedHashMap<String,StaticMapProperties> fieldNameToHeaderName = sheetNameToSheetMap.get(sheetName);
+        HashMap<String,StaticMapProperties> fieldNameToHeaderName = sheetNameToSheetMap.get(sheetName);
         if(!fieldNameToHeaderName.isEmpty())
             for(Map.Entry<String,StaticMapProperties>  fieldNameToHeaderNameEntity : fieldNameToHeaderName.entrySet()){
                 String key = fieldNameToHeaderNameEntity.getKey();
                 StaticMapProperties headerProperty =fieldNameToHeaderName.get(key);
                 if(headerProperty.getIsVisible()) {
+                    int colno=headerProperty.getColumnNo();
                     XSSFCell cell = row.createCell(colno);
                     cell.setCellStyle(style);
                     cell.setCellValue(headerProperty.getHeaderName());
                     sheet.autoSizeColumn(colno);
-                    colno++;
                 }
             }
     }
 
     private void dataMapping(TransactionItem transactionItem, XSSFSheet sheet,  XSSFCellStyle style , int rowNo,String sheetName) throws JsonProcessingException {
-        int colno = 0;
+        int colno ;
         XSSFRow  row = sheet.createRow(rowNo);
         Map<String,String> flattenFieldToValue = flattenUtil(transactionItem);
-        LinkedHashMap<String,StaticMapProperties> fieldNameToHeaderName = sheetNameToSheetMap.get(sheetName);
+        HashMap<String,StaticMapProperties> fieldNameToHeaderName = sheetNameToSheetMap.get(sheetName);
         for(Map.Entry<String,String> nameToValueEntity : flattenFieldToValue.entrySet()){
             String value = nameToValueEntity.getValue();
             String key = nameToValueEntity.getKey();
             StaticMapProperties headerProperty =fieldNameToHeaderName.get(key);
             if(fieldNameToHeaderName.containsKey(key) && headerProperty.getIsVisible()) {
+                colno=headerProperty.getColumnNo();
                 XSSFCell cell = row.createCell(colno);
                 cell.setCellStyle(style);
                 if (String.valueOf(value).equals("null")) {
@@ -111,7 +122,6 @@ public class CommonService {
                     else cell.setCellValue(String.valueOf(value));
                 }
                 sheet.autoSizeColumn(colno);
-                colno++;
             }
         }
     }
@@ -160,8 +170,7 @@ public class CommonService {
             style.setAlignment(HorizontalAlignment.CENTER);
             List<ChargeType> chargeTypes = entry.getValue();
             List<TransactionItem> transactionItems = commonRepo.findByOrgCodeAndTransectionTimeAndChargeType(orgNo, startDate,endDate,chargeTypes);
-            if(!transactionItems.isEmpty())
-                setHeader(sheet,style,sheetName);
+            setHeader(sheet,style,sheetName);
             int rowno=1;
             for(TransactionItem transactionItem : transactionItems){
                 dataMapping(transactionItem,sheet,style,rowno,sheetName);
