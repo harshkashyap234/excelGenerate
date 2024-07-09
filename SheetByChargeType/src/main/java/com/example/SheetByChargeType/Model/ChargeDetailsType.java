@@ -1,6 +1,6 @@
 package com.example.SheetByChargeType.Model;
 
-public enum ChargeType {
+public enum ChargeDetailsType {
     FULFILLMENT_FEE,
     COD_REMITTANCE,
     COMMUNICATION_FEE,
