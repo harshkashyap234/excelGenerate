@@ -1,7 +1,11 @@
 package com.example.SheetByChargeType.Service;
 
-import com.example.SheetByChargeType.Model.*;
+import com.example.SheetByChargeType.Model.ChargeDetailsType;
+import com.example.SheetByChargeType.Model.ExcelConfig;
+import com.example.SheetByChargeType.Model.HeaderMapping;
+import com.example.SheetByChargeType.Model.TransactionItem;
 import com.example.SheetByChargeType.Repositories.TransactionItemRepository;
+import com.example.SheetByChargeType.Repositories.TransactionRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,7 +13,9 @@ import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,15 +37,20 @@ public class CommonService {
     @Autowired
     private  HashMap<String, List<ChargeDetailsType>> sheetNameToChargeDetailsType ;
     @Autowired
+    @Qualifier("percentageCheckMap")
     private Set<String> percentageCheckMap;
     @Autowired
     private LoadJsonDataService loadJsonDataService;
     @Autowired
+    @Qualifier("dateCheckMap")
     private Set<String>  dateCheckMap;
     @Autowired
     private TransactionItemRepository transactionItemRepository;
     @Autowired
+    private TransactionRepository transactionRepository;
+    @Autowired
     private ObjectMapper objectMapper;
+
 
     private static void flatten(JsonNode node, String prefix, HashMap<String,String> mapOfOrderField) {
         if (node.isObject()) {
@@ -195,9 +206,17 @@ public class CommonService {
                 }
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 workbook.write(bos);
+
+                try (FileOutputStream fo = new FileOutputStream(new File("sheet2.xlsx"))) {
+                    workbook.write(fo);
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                }
+
                 return bos.toByteArray();
             }
         }
         return null;
     }
+
 }

@@ -7,7 +7,7 @@ import java.util.*;
 @Configuration
 public class CommonConfig {
     @Bean
-    public static HashMap<String,List<ChargeDetailsType>> sheetNameToChargeType(){
+    public static HashMap<String,List<ChargeDetailsType>> sheetNameToChargeDetailsType(){
         HashMap<String,List<ChargeDetailsType>> nameToChargeType = new HashMap<>();
         nameToChargeType.put("Fulfillment Itemized Statement",new ArrayList<>(List.of(ChargeDetailsType.FULFILLMENT_FEE)));
         nameToChargeType.put("COD Remittance Statement",new ArrayList<>(List.of(ChargeDetailsType.COD_REMITTANCE)));
