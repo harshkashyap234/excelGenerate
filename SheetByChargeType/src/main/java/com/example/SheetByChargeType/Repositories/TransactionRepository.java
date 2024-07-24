@@ -15,12 +15,32 @@ import java.util.List;
 public interface TransactionRepository extends MongoRepository<Transactions,String> {
 
 
+    @Aggregation(pipeline = {"{$match:{\n"+
+            "  transactionTime: {\n" +
+            "    $gte: ISODate('2024-07-06T06:55:47.642Z'),\n" +
+            "    $lt: ISODate('2024-07-10T06:55:47.642Z')\n" +
+            "  }\n" +
+            "}}",
+            "{$group:{ _id : '$orgCode' }}",
+            "{$project: {\n" +
+                    "  '_id': 0,\n" +
+                    "  orgCode: '$_id'}}"
+
+    }
+    )
+    List<String>  findByOrg(String startDate, String endDate);
+
+
+
+
+
+
     @Aggregation(pipeline = {
             "{$match: {\n" +
-                    "  orgCode: 'STE9QG9',\n" +
+                    "  orgCode: ?0,\n" +
                     "  transactionTime: {\n" +
-                    "    $gte: ISODate('2024-07-06T06:55:47.642Z'),\n" +
-                    "    $lt: ISODate('2024-07-10T06:55:47.642Z')\n" +
+                    "    $gte: ?1,\n" +
+                    "    $lt: ?2\n" +
                     "  }\n" +
                     "}}",
             "{$group: {\n" +

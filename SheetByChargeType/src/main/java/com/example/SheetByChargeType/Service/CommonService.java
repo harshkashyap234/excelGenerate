@@ -51,7 +51,6 @@ public class CommonService {
     @Autowired
     private ObjectMapper objectMapper;
 
-
     private static void flatten(JsonNode node, String prefix, HashMap<String,String> mapOfOrderField) {
         if (node.isObject()) {
             Iterator<Map.Entry<String, JsonNode>> fields = node.fields();

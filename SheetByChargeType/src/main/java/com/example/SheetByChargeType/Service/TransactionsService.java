@@ -62,12 +62,12 @@ public class TransactionsService {
         List<NetTotalDto>   listOfDto =transactionRepository.findAggregatedResults(orgCode,startDate,endDate);
         List<Map<String,Object>> list= new ArrayList<>();
         for(NetTotalDto data : listOfDto) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("chargeType", data.getChargeType());
-            map.put("totalCredit", data.getTotalCredit());
-            map.put("totalDebit", data.getTotalDebit());
-            map.put("netTotal", data.getNetTotal());
-            list.add(map);
+            Map<String, Object> chargeTypetoValue = new HashMap<>();
+            chargeTypetoValue.put("chargeType", data.getChargeType());
+            chargeTypetoValue.put("totalCredit", data.getTotalCredit());
+            chargeTypetoValue.put("totalDebit", data.getTotalDebit());
+            chargeTypetoValue.put("netTotal", data.getNetTotal());
+            list.add(chargeTypetoValue);
         }
         ByteArrayOutputStream pdfStream = generatePdfStream(list,listOfDto);
         return pdfStream ;
