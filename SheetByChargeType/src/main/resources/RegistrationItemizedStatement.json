@@ -1,0 +1,61 @@
+{
+  "sheetName": "txn_items",
+  "format": "EXCEL",
+  "headers": [
+    {
+      "field_name": "orgCode.",
+      "column_header": "Org Code",
+      "required": true
+    },
+    {
+      "field_name": "transactionTime.",
+      "column_header": "Date of Ledger",
+      "required": true
+    },
+    {
+      "field_name": "transactionType.",
+      "column_header": "Transaction Type",
+      "required": true
+    },
+    {
+      "field_name": "transactionReference.",
+      "column_header": "Transaction ID",
+      "required": true
+    },
+    {
+      "field_name": "chargeDetails.chargeType.",
+      "column_header": "Charge Type",
+      "required": true
+    },
+    {
+      "field_name": "chargeDetails.platformName.",
+      "column_header": "Platform Name",
+      "required": true
+    },
+    {
+      "field_name": "chargeDetails.liveDate.",
+      "column_header": "Live Date",
+      "required": true
+    },
+    {
+      "field_name": "totalCharges.currencyCode.",
+      "column_header": "Currency Code",
+      "required": true
+    },
+    {
+      "field_name": "totalCharges.amount.",
+      "column_header": "Total Charges",
+      "required": true
+    },
+    {
+      "field_name": "gstPercentage.",
+      "column_header": "Gst Percentage",
+      "required": true
+    },
+    {
+      "field_name": "totalChargesWithGst.amount.",
+      "column_header": "Total Charges (With Gst)",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,191 @@
+{
+  "sheetName": "txn_items",
+  "format": "EXCEL",
+  "headers": [
+    {
+      "field_name": "transactionTime",
+      "column_header": "Date of Ledger",
+      "required": true
+    },
+    {
+      "field_name": "orgCode.",
+      "column_header": "Client Code",
+      "required": true
+    },
+    {
+      "field_name": "chargeDetails.chargeType.",
+      "column_header": "Charge Type",
+      "required": true
+    },
+    {
+      "field_name": "chargeSubType.",
+      "column_header": "Service Type",
+      "required": true
+    },
+    {
+      "field_name": "courierAwbNo.",
+      "column_header": "Courier AWB",
+      "required": true
+    },
+    {
+      "field_name": "chargeDetails.shipmentValue.amount.",
+      "column_header": "Shipment Value",
+      "required": true
+    },
+    {
+      "field_name": "chargeDetails.sourcePincode.",
+      "column_header": "Source Pincode",
+      "required": true
+    },
+    {
+      "field_name": "chargeDetails.sourceCity.",
+      "column_header": "Source City",
+      "required": true
+    },
+    {
+      "field_name": "chargeDetails.destinationPincode.",
+      "column_header": "Destination Pincode",
+      "required": true
+    },
+    {
+      "field_name": "chargeDetails.destinationCity.",
+      "column_header": "Destination City",
+      "required": true
+    },
+    {
+      "field_name": "chargeDetails.zone.",
+      "column_header": "Zone",
+      "required": true
+    },
+    {
+      "field_name": "chargeDetails.courierCode.",
+      "column_header": "Courier Code",
+      "required": true
+    },
+    {
+      "field_name": "chargeDetails.deadWeight.",
+      "column_header": "Dead Weight",
+      "required": true
+    },
+    {
+      "field_name": "chargeDetails.volumeWeight.",
+      "column_header": "Volume Weight",
+      "required": true
+    },
+    {
+      "field_name": "chargeDetails.chargedWeight.",
+      "column_header": "Charged Weight",
+      "required": true
+    },
+    {
+      "field_name": "chargeDetails.weightSlab.",
+      "column_header": "Weight Slab",
+      "required": true
+    },
+    {
+      "field_name": "chargeDetails.shipmentType.",
+      "column_header": "Shipment Type",
+      "required": true
+    },
+    {
+      "field_name": "chargeDetails.paymentMode.",
+      "column_header": "Payment Mode",
+      "required": true
+    },
+    {
+      "field_name": "chargeDetails.freightCharges.currencyCode.",
+      "column_header": "Currency Code",
+      "required": true
+    },
+    {
+      "field_name": "chargeDetails.freightCharges.amount.",
+      "column_header": "Freight Charges Amount",
+      "required": true
+    },
+    {
+      "field_name": "chargeDetails.codCharges.currencyCode.",
+      "column_header": "Currency Code",
+      "required": true
+    },
+    {
+      "field_name": "chargeDetails.codCharges.amount.",
+      "column_header": "Cod Charges Amount",
+      "required": true
+    },
+    {
+      "field_name": "totalCharges.currencyCode.",
+      "column_header": "Total Charges Currency Code",
+      "required": true
+    },
+    {
+      "field_name": "totalCharges.amount.",
+      "column_header": "Total Charges Amount",
+      "required": true
+    },
+    {
+      "field_name": "totalChargesWithGst.amount.",
+      "column_header": "Total Charges (With Gst)",
+      "required": true
+    },
+    {
+      "field_name": "rtoCharges.",
+      "column_header": "Declared RTO Charges",
+      "required": true
+    },
+    {
+      "field_name": "newZone.",
+      "column_header": "New Zone",
+      "required": true
+    },
+    {
+      "field_name": "newDeadWeight.",
+      "column_header": "New Dead Weight",
+      "required": true
+    },
+    {
+      "field_name": "newVolWeight.",
+      "column_header": "New Vol. Weight",
+      "required": true
+    },
+    {
+      "field_name": "newChargedWeight.",
+      "column_header": "New Charged Weight",
+      "required": true
+    },
+    {
+      "field_name": "newForwardFreight.",
+      "column_header": "New Forward Freight",
+      "required": true
+    },
+    {
+      "field_name": "newCodCharges.",
+      "column_header": "New COD Charges",
+      "required": true
+    },
+    {
+      "field_name": "newRtoCharges.",
+      "column_header": "New RTO Charges",
+      "required": true
+    },
+    {
+      "field_name": "newTotalCharges.",
+      "column_header": "New Total Charges",
+      "required": true
+    },
+    {
+      "field_name": "newTotalChargesWithGst.",
+      "column_header": "New Total Charges (with GST)",
+      "required": true
+    },
+    {
+      "field_name": "differenceAmount.",
+      "column_header": "Difference Amount",
+      "required": true
+    },
+    {
+      "field_name": "transactionReference.",
+      "column_header": "Transaction ID",
+      "required": true
+    }
+  ]
+}
